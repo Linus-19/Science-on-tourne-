@@ -1,0 +1,90 @@
+import svgwrite as svg
+
+file_path = 'Instruction.txt'
+dwg = svg.Drawing('test.svg', size=("6.5cm", "55cm"), profile='tiny')
+
+try:
+    with open(file_path, 'r') as file:
+        lines = [line.strip() for line in file]
+except FileNotFoundError:
+    print(f"Error: The file '{file_path}' was not found.")
+
+var = [0, 0, 0, 0]
+i = 0
+
+
+while i < len(lines):
+    instruction = lines[i]
+    if i < 4:
+        var[i] = float(instruction)
+    elif i == 4:
+        # ligne vide, on skip
+        pass
+    elif i == 5:
+        rap = float(var[0])
+        rpm = float(var[1])
+        ratio = float(var[2])
+        temps_pour_tourner = float(var[3])
+        temp = 0.5  # position de départ en cm, pas besoin de * rap ici
+        print("-----Instructions-------")
+        # on ne skip pas, on traite la première instruction
+        match instruction:
+            case "F":
+                i += 1
+                time = lines[i]
+                hauteur = float(time) * rap
+                dwg.add(svg.shapes.Rect((svg.cm(2.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                dwg.add(svg.shapes.Rect((svg.cm(0.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                temp += hauteur
+                print("going foward for " + time + " seconds")
+    else:
+        match instruction:
+            case "F":
+                i += 1
+                time = lines[i]
+                hauteur = float(time) * rap
+                dwg.add(svg.shapes.Rect((svg.cm(2.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                dwg.add(svg.shapes.Rect((svg.cm(0.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                temp += hauteur
+                print("going foward for " + time + " seconds")
+
+            case "R":
+                hauteur = temps_pour_tourner * rap
+                dwg.add(svg.shapes.Rect((svg.cm(2.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                temp += hauteur
+                print(f"Turning right for {temps_pour_tourner} sec")
+
+            case "R+":
+                hauteur = temps_pour_tourner * rap
+                dwg.add(svg.shapes.Rect((svg.cm(2.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                dwg.add(svg.shapes.Rect((svg.cm(1.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                temp += hauteur
+
+            case "L":
+                hauteur = temps_pour_tourner * rap
+                dwg.add(svg.shapes.Rect((svg.cm(0.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                temp += hauteur
+                print("Turning left")
+
+            case "L+":
+                hauteur = temps_pour_tourner * rap
+                dwg.add(svg.shapes.Rect((svg.cm(3.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                dwg.add(svg.shapes.Rect((svg.cm(0.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                temp += hauteur
+                print("Left on itself")
+
+            case "B":
+                dwg.add(svg.shapes.Rect((svg.cm(4.5), svg.cm(0.5)), (svg.cm(0.5), svg.cm(temp-0.5))))
+                dwg.add(svg.shapes.Rect((svg.cm(5.5), svg.cm(temp)), (svg.cm(0.5), svg.cm(54.5-temp))))
+            
+            case "P":
+                i += 1
+                time = lines[i]
+                hauteur = float(time) * rap
+                temp += hauteur
+
+
+    i += 1
+
+print("Exporting")
+dwg.save()  

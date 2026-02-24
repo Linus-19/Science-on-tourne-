@@ -1,0 +1,19 @@
+rapport temps distance sur le papier (m:s)
+RPM des moteurs
+Ratio moteur : roues (en décimales)
+temps pour faire un 90 degrées (s)   
+----- espace-------
+F = foward suivis du temps
+R = right
+R+ = right on itslef
+L = left
+L+ = left on itself
+B = changer le sens de la rotation des balais.
+P = pause suivis du temps
+
+
+
+
+    |    |    |    |    |    |
+    LF   LB   RF   RB   BF   BB
+    0.5  1.5  2.5  3.5  4.5  5.5
