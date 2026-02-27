@@ -2,6 +2,7 @@ rapport temps distance sur le papier (m:s)
 RPM des moteurs
 Ratio moteur : roues (en décimales)
 temps pour faire un 90 degrées (s)   
+marge de départ (en cm)
 ----- espace-------
 F = foward suivis du temps
 R = right
