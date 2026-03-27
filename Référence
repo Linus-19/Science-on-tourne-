@@ -1,10 +1,11 @@
-rapport temps distance sur le papier (m:s)
+rapport temps distance sur le papier (cm:s)
 RPM des moteurs
 Ratio moteur : roues (en décimales)
 temps pour faire un 90 degrées (s)   
 marge de départ (en cm)
 ----- espace-------
-F = foward suivis du temps
+F = foward suivis de la distance
+A = arrière suivis de la distance
 R = right
 R+ = right on itslef
 L = left
@@ -15,6 +16,31 @@ P = pause suivis du temps
 
 
 
-    |    |    |    |    |    |
-    LF   LB   RF   RB   BF   BB
-    0.5  1.5  2.5  3.5  4.5  5.5
+    |    |    |    |    |        |
+    BF   BB   RF   RB   LF      LB
+    .76  1.83  2.9  3.9  4.97  6.04
+
+
+
+
+
+Feuille test :
+0.38
+275
+0.125
+2.9
+9
+
+F
+10
+L
+F
+5
+R
+B
+P
+1
+L+
+F
+5
+R+
