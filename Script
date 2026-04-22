@@ -2,10 +2,25 @@ import svgwrite as svg
 height = 58
 width = 7.25
 
+temp_de_pause = 0.75
+
 file_path = 'Instruction.txt'
 
+def Pos(pine) :
+    match pine :
+        case 1:
+            return 0.7
+        case 2:
+            return 1.81
+        case 3:
+            return 2.8
+        case 4 :
+            return 3.9
+        case 5 :
+            return 5.03
+        case 6 :
+            return 6.13
 
-print ("drawing circles")
 try:
     with open(file_path, 'r') as file:
         lines = [line.strip() for line in file]
@@ -18,20 +33,17 @@ i = 0
 
 while i < len(lines):
     instruction = lines[i]
-    if i < 5:
+    if i < 4:
         var[i] = float(instruction)
-    elif i == 5:
+    elif i == 4:
         rap = float(var[0])
-        rpm = float(var[1])
-        ratio = float(var[2])
-        temps_pour_tourner = float(var[3])
-        marge = float(var[4])
+        v_fwd = float(var[1])
+        v_side = float(var[2])
+        marge = float(var[3])
         temp = marge  
+        print(marge)
         dwg = svg.Drawing('test.svg', size=(f"{width}cm", f"{height}cm"), profile='tiny')
-        rpm_roues = rpm * ratio
-        
-        vitesse = rpm_roues/60 * 4.9 * 3.1416
-        print (vitesse)
+    
         print("Lecture...")
         dwg.add(svg.shapes.Line((svg.cm(0), svg.cm(0)), (svg.cm(0), svg.cm(height))))
         dwg.add(svg.shapes.Line((svg.cm(0), svg.cm(0)), (svg.cm(width), svg.cm(0))))
@@ -40,9 +52,11 @@ while i < len(lines):
 
         dwg.add(svg.shapes.Circle((svg.cm(width/2 + 1.9), svg.cm(0.6)), svg.cm(0.3)))
         dwg.add(svg.shapes.Rect((svg.cm(0), svg.cm(0)), (svg.cm(1.1), svg.cm(0.9))))
+        dwg.add(svg.shapes.Rect((svg.cm(0), svg.cm(height-0.9)), (svg.cm(1.1), svg.cm(0.9))))
         dwg.add(svg.shapes.Circle((svg.cm(1), svg.cm(2)), svg.cm(0.3)))
         dwg.add(svg.shapes.Circle((svg.cm(width/2 - 1.9), svg.cm(0.6)), svg.cm(0.3)))
         dwg.add(svg.shapes.Rect((svg.cm(width-1.1), svg.cm(0)), (svg.cm(1.1), svg.cm(0.9))))
+        dwg.add(svg.shapes.Rect((svg.cm(width-1.1), svg.cm(height-0.9)), (svg.cm(1.1), svg.cm(0.9))))
         dwg.add(svg.shapes.Circle((svg.cm(width/2 + 1.9), svg.cm(height - 0.6)), svg.cm(0.3)))
         dwg.add(svg.shapes.Circle((svg.cm(width/2 - 1.9), svg.cm(height - 0.6)), svg.cm(0.3)))
         # on ne skip pas, on traite la première instruction
@@ -51,48 +65,41 @@ while i < len(lines):
             case "F":
                 i += 1
                 distance = lines[i]
-                hauteur = float(distance) / vitesse * rap
-                dwg.add(svg.shapes.Rect((svg.cm(2.8), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                dwg.add(svg.shapes.Rect((svg.cm(5.03), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                hauteur = float(distance) / v_fwd * rap
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(3)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
                 temp += hauteur
+                temp += temp_de_pause * rap
 
             
             case "A" :
                 i += 1
                 distance = lines[i]
-                hauteur = float(distance) / vitesse * rap
-                dwg.add(svg.shapes.Rect((svg.cm(3.9), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                dwg.add(svg.shapes.Rect((svg.cm(6.13), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                hauteur = float(distance) / v_fwd * rap
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(4)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
                 temp += hauteur
+                temp += temp_de_pause * rap
 
             case "R":
-                hauteur = temps_pour_tourner * rap
-                dwg.add(svg.shapes.Rect((svg.cm(2.8), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                i += 1
+                distance = lines[i]
+                hauteur = float(distance) / v_side * rap 
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(5)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
                 temp += hauteur
-
-
-            case "R+":
-                hauteur = temps_pour_tourner/2 * rap
-                dwg.add(svg.shapes.Rect((svg.cm(2.80), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                dwg.add(svg.shapes.Rect((svg.cm(6.13), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                temp += hauteur
+                temp += temp_de_pause * rap
 
             case "L":
-                hauteur = temps_pour_tourner * rap
-                dwg.add(svg.shapes.Rect((svg.cm(5.03), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                i += 1
+                distance = lines[i]
+                hauteur = float(distance) /v_side * rap
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(6)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
                 temp += hauteur
-
-
-            case "L+":
-                hauteur = temps_pour_tourner/2 * rap
-                dwg.add(svg.shapes.Rect((svg.cm(3.9), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                dwg.add(svg.shapes.Rect((svg.cm(5.03), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                temp += hauteur
+                temp += temp_de_pause * rap
 
 
             case "B":
-                dwg.add(svg.shapes.Rect((svg.cm(1.81), svg.cm(marge)), (svg.cm(0.5), svg.cm(temp-marge))))
-                dwg.add(svg.shapes.Rect((svg.cm(0.70), svg.cm(temp)), (svg.cm(0.5), svg.cm(height - marge -temp))))
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(2)), svg.cm(marge)), (svg.cm(0.5), svg.cm(temp-marge))))
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(1)), svg.cm(temp)), (svg.cm(0.5), svg.cm(height - marge -temp))))
+
             
             case "P":
                 i += 1
@@ -103,6 +110,9 @@ while i < len(lines):
 
     i += 1
 print (f"Durée {temp / rap}")
-print (temp)
-print("Exporting")
+if height-temp < marge :
+    print("TROP LONGGGGGGG!!!!")
+print("Done!")
 dwg.save()  
+
+
