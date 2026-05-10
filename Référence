@@ -2,6 +2,7 @@ rapport temps distance sur le papier (cm:s)
 vitesse devant
 vitesse côté 
 marge de départ (en cm)
+temps pour faire tomber antenne (s)
 ----- espace-------
 F = foward suivis de la distance
 A = arrière suivis de la distance
@@ -13,165 +14,43 @@ P = pause suivis du temps
 
 
 
-    |    |    |    |    |        |
-    BF   BB   RF   RB   LF      LB
-    .76  1.83  2.9  3.9  4.97  6.04
 
-
-
-
-
-Code avec ajustement pour imprimante :
- case "A" :
-                i += 1
-                distance = lines[i]
-                hauteur = float(distance) / vitesse * rap
-                hauteur -= 0.02
-                dwg.add(svg.shapes.Rect((svg.cm(3.9), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                dwg.add(svg.shapes.Rect((svg.cm(6.13), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                temp += hauteur
-
-            case "R":
-                hauteur = temps_pour_tourner * rap - 0.02
-                dwg.add(svg.shapes.Rect((svg.cm(2.8), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                temp += hauteur
-
-
-            case "R+":
-                hauteur = temps_pour_tourner * 0.25 * rap - 0.02
-                dwg.add(svg.shapes.Rect((svg.cm(2.80), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                dwg.add(svg.shapes.Rect((svg.cm(6.13), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                temp += hauteur
-
-            case "L":
-                hauteur = temps_pour_tourner * rap - 0.02
-                dwg.add(svg.shapes.Rect((svg.cm(5.03), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                temp += hauteur
-
-
-            case "L+":
-                hauteur = temps_pour_tourner * 0.525 * rap - 0.02
-                dwg.add(svg.shapes.Rect((svg.cm(3.9), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                dwg.add(svg.shapes.Rect((svg.cm(5.03), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
-                temp += hauteur
-
-
-            case "B":
-                dwg.add(svg.shapes.Rect((svg.cm(1.81), svg.cm(marge)), (svg.cm(0.5), svg.cm(temp-marge))))
-                dwg.add(svg.shapes.Rect((svg.cm(0.70), svg.cm(temp)), (svg.cm(0.5), svg.cm(height - marge -temp))))
-            
-            case "P":
-                i += 1
-                time = lines[i]
-                hauteur = float(time) * rap - 0.02
-                temp += hauteur
-
-
-
---------------- Feuille test :-------------
-0.38
-275
-0.125
-2.9
-9
-
-F
-10
-L
-F
-5
 R
-B
-P
+14.98
+F
+42.8
+L
+27.8
+A
+16.05
+F 
+5.35
+R 
+40.66 
+A 
+34.78
+B 
+P 
+3
+L 
+15
+F 
+63
+L 
+24
+
+
+
+R
+28.89
+B 
+P 
 1
-L+
+F 
+5 
+L 
+15
 F
-5
-R+
-
------------------- P1 : ----------------------
-L
-F
-3
-R
-F
-108
-R+
-F
-49.4
-L
-F
-33
-L+
-F
-43
-R+
-F
-75
-R+
-F
-57
-L+
-F
-100
-R+
-22.1
-L+
-F
-67.5
-R
-B
-P
-3
-A
-5
-L+
-F
-62.5
-L+
-F
-35.5
-
-
-P2
-F
-26
-R+
-F
-116
-R+
-F
-52.4
-L
-F
-33
-L+
-F
-43
-R+
-F
-75
-R+
-F
-57
-L+
-F
-100
-R+
-F
-22.1
-L+
-F
-67.5
-R
-B
-P
-3
-A
-5
-L+
-F
-62.5
-L+
-F
-35.5
+63
+L 
+24

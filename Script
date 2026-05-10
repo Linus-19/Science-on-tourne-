@@ -30,16 +30,19 @@ except FileNotFoundError:
 var = [0, 0, 0, 0, 0]
 i = 0
 
+d_devant = 0
+d_cote = 0
 
 while i < len(lines):
     instruction = lines[i]
-    if i < 4:
+    if i < 5:
         var[i] = float(instruction)
-    elif i == 4:
+    elif i == 5:
         rap = float(var[0])
         v_fwd = float(var[1])
         v_side = float(var[2])
         marge = float(var[3])
+        temps_antenne = float(var[4])
         temp = marge  
         print(marge)
         dwg = svg.Drawing('test.svg', size=(f"{width}cm", f"{height}cm"), profile='tiny')
@@ -65,51 +68,59 @@ while i < len(lines):
             case "F":
                 i += 1
                 distance = lines[i]
-                hauteur = float(distance) / v_fwd * rap
+                d_devant += float(distance)
+                hauteur = (float(distance) / v_fwd) * rap
                 dwg.add(svg.shapes.Rect((svg.cm(Pos(3)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
                 temp += hauteur
-                temp += temp_de_pause * rap
+                #temp += temp_de_pause * rap
 
             
             case "A" :
                 i += 1
                 distance = lines[i]
-                hauteur = float(distance) / v_fwd * rap
+                d_devant += float(distance)
+                hauteur = (float(distance) / v_fwd) * rap
                 dwg.add(svg.shapes.Rect((svg.cm(Pos(4)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
                 temp += hauteur
-                temp += temp_de_pause * rap
+                #temp += temp_de_pause * rap
 
             case "R":
                 i += 1
                 distance = lines[i]
-                hauteur = float(distance) / v_side * rap 
-                dwg.add(svg.shapes.Rect((svg.cm(Pos(5)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                d_cote += float(distance)
+                hauteur = (float(distance) / v_side) * rap 
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(2)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
                 temp += hauteur
-                temp += temp_de_pause * rap
+                #temp += temp_de_pause * rap
 
             case "L":
                 i += 1
                 distance = lines[i]
-                hauteur = float(distance) /v_side * rap
-                dwg.add(svg.shapes.Rect((svg.cm(Pos(6)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
+                d_cote += float(distance)
+                hauteur = (float(distance) /v_side) * rap
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(1)), svg.cm(temp)), (svg.cm(0.5), svg.cm(hauteur))))
                 temp += hauteur
-                temp += temp_de_pause * rap
+                #temp += temp_de_pause * rap
 
 
             case "B":
-                dwg.add(svg.shapes.Rect((svg.cm(Pos(2)), svg.cm(marge)), (svg.cm(0.5), svg.cm(temp-marge))))
-                dwg.add(svg.shapes.Rect((svg.cm(Pos(1)), svg.cm(temp)), (svg.cm(0.5), svg.cm(height - marge -temp))))
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(5)), svg.cm(marge)), (svg.cm(0.5), svg.cm(temp-marge))))
+                dwg.add(svg.shapes.Rect((svg.cm(Pos(6)), svg.cm(temp)), (svg.cm(0.5), svg.cm(height - marge -temp))))
 
             
-            case "P":
+            case "P" :
                 i += 1
                 time = lines[i]
                 hauteur = float(time) * rap
                 temp += hauteur
 
 
+
+
     i += 1
-print (f"Durée {temp / rap}")
+print (f"Durée {(temp-marge) / rap}")
+print (f"Devant {d_devant / v_fwd}")
+print (f"Côté {d_cote/v_side}")
 if height-temp < marge :
     print("TROP LONGGGGGGG!!!!")
 print("Done!")
